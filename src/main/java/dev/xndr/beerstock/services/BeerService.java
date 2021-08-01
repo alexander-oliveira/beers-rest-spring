@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class BeerService {
     
     private final BeerRepository beerRepository;
-    private final BeerMapper beerMapper;
+    private final BeerMapper beerMapper = BeerMapper.INSTANCE;
     
     public List<BeerDTO> listAll(){
         return beerRepository.findAll()
