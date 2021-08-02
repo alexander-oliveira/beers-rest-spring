@@ -2,6 +2,7 @@ package dev.xndr.beerstock.controllers;
 
 import dev.xndr.beerstock.dto.BeerDTO;
 import dev.xndr.beerstock.exceptions.BeerAlreadyRegisteredException;
+import dev.xndr.beerstock.exceptions.BeerNotFoundException;
 import dev.xndr.beerstock.services.BeerService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,11 @@ public class BeerController {
     @ResponseStatus(HttpStatus.CREATED)
     public BeerDTO createBeer(@RequestBody @Valid BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
         return beerService.createBeer(beerDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) throws BeerNotFoundException {
+        beerService.deleteById(id);
     }
 }
