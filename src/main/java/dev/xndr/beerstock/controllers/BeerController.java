@@ -1,13 +1,14 @@
 package dev.xndr.beerstock.controllers;
 
 import dev.xndr.beerstock.dto.BeerDTO;
+import dev.xndr.beerstock.exceptions.BeerAlreadyRegisteredException;
 import dev.xndr.beerstock.services.BeerService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,5 +21,11 @@ public class BeerController {
     @GetMapping
     public List<BeerDTO> listBeers(){
         return beerService.listAll();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public BeerDTO createBeer(@RequestBody @Valid BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
+        return beerService.createBeer(beerDTO);
     }
 }
