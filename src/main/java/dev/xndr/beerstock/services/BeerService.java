@@ -50,4 +50,10 @@ public class BeerService {
         return beerRepository.findById(id)
                 .orElseThrow(() -> new BeerNotFoundException(id));
     }
+
+    public BeerDTO findByName(String name) throws BeerNotFoundException {
+        Beer foundBeer = beerRepository.findByName(name)
+                .orElseThrow(() -> new BeerNotFoundException(name));
+        return beerMapper.toDTO(foundBeer);
+    }
 }

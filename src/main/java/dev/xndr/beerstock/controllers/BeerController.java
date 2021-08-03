@@ -35,4 +35,9 @@ public class BeerController {
     public void deleteById(@PathVariable Long id) throws BeerNotFoundException {
         beerService.deleteById(id);
     }
+
+    @GetMapping("/{name}")
+    public BeerDTO findByName(@PathVariable String name) throws BeerNotFoundException {
+        return beerService.findByName(name);
+    }
 }
