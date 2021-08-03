@@ -4,6 +4,7 @@ import dev.xndr.beerstock.dto.BeerDTO;
 import dev.xndr.beerstock.entities.Beer;
 import dev.xndr.beerstock.exceptions.BeerAlreadyRegisteredException;
 import dev.xndr.beerstock.exceptions.BeerNotFoundException;
+import dev.xndr.beerstock.exceptions.BeerStockExceededException;
 import dev.xndr.beerstock.mapper.BeerMapper;
 import dev.xndr.beerstock.repositories.BeerRepository;
 import java.util.List;
@@ -55,5 +56,16 @@ public class BeerService {
         Beer foundBeer = beerRepository.findByName(name)
                 .orElseThrow(() -> new BeerNotFoundException(name));
         return beerMapper.toDTO(foundBeer);
+    }
+
+    public BeerDTO increment(Long id, Integer quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException {
+        Beer beerToIncrementStock = verifyIfExists(id);
+        int quantityAfterIncrement = quantityToIncrement + beerToIncrementStock.getQuantity();
+        if (quantityAfterIncrement <= beerToIncrementStock.getMax()) {
+            beerToIncrementStock.setQuantity(beerToIncrementStock.getQuantity() + quantityToIncrement);
+            Beer incrementedBeerStock = beerRepository.save(beerToIncrementStock);
+            return beerMapper.toDTO(incrementedBeerStock);
+        }
+        throw new BeerStockExceededException(id, quantityToIncrement);
     }
 }

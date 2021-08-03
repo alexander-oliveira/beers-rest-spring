@@ -1,8 +1,10 @@
 package dev.xndr.beerstock.controllers;
 
 import dev.xndr.beerstock.dto.BeerDTO;
+import dev.xndr.beerstock.dto.QuantityDTO;
 import dev.xndr.beerstock.exceptions.BeerAlreadyRegisteredException;
 import dev.xndr.beerstock.exceptions.BeerNotFoundException;
+import dev.xndr.beerstock.exceptions.BeerStockExceededException;
 import dev.xndr.beerstock.services.BeerService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +41,10 @@ public class BeerController {
     @GetMapping("/{name}")
     public BeerDTO findByName(@PathVariable String name) throws BeerNotFoundException {
         return beerService.findByName(name);
+    }
+
+    @PatchMapping("/{id}/increment")
+    public BeerDTO increment(@PathVariable Long id, @RequestBody @Valid QuantityDTO quantityDTO) throws BeerNotFoundException, BeerStockExceededException {
+        return beerService.increment(id, quantityDTO.getQuantity());
     }
 }
